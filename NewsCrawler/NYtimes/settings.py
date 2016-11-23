@@ -64,9 +64,11 @@ ROBOTSTXT_OBEY = True
 
 # Configure item pipelines
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
-#ITEM_PIPELINES = {
+ITEM_PIPELINES = {
    # 'NYtimes.pipelines.SomePipeline': 300,
-#}
+   "NYtimes.pipelines.MongoDBPipeline": 1
+   # "NYtimes.pipelines.KafkaPipeline": 300
+}
 
 # Enable and configure the AutoThrottle extension (disabled by default)
 # See http://doc.scrapy.org/en/latest/topics/autothrottle.html
@@ -88,3 +90,9 @@ ROBOTSTXT_OBEY = True
 #HTTPCACHE_DIR = 'httpcache'
 #HTTPCACHE_IGNORE_HTTP_CODES = []
 #HTTPCACHE_STORAGE = 'scrapy.extensions.httpcache.FilesystemCacheStorage'
+
+MONGODB_SERVER = "192.241.227.63"
+MONGODB_PORT = 27017
+# MONGODB_DB = "NYtimes"
+MONGODB_DB = "local"
+MONGODB_COLLECTION = "news"
