@@ -1,6 +1,7 @@
 import scrapy
 from NYtimes.items import NYtimesItem
 
+# verify in Chrome $x("//meta[@name="hdl"]/@content")
 class NytimesSpider(scrapy.Spider):
     name = "NYtimes"
     allowed_domains = ["nytimes.com"]
@@ -22,11 +23,13 @@ class NytimesSpider(scrapy.Spider):
 
         return News
 
+
+    # Example responseUrl: http://www.nytimes.com/2015/07/31/business/dealbook/royal-bank-of-scotland-earnings-q2.html
     def parseSave(self, response):
         item = NYtimesItem();
 
         item["link"] = unicode(response.url)
-        item["link"] = unicode(response.url.split("/")[-2])
+        item["category"] = unicode(response.url.split("/")[-2])
         item["title"] = unicode(response.xpath('//meta[@name="hdl"]/@content').extract()[0])
         item["author"] = unicode(response.xpath('//meta[@name="byl"]/@content').extract()[0])
         item["date"] = unicode(response.xpath('//meta[@name="dat"]/@content').extract()[0])

@@ -14,8 +14,7 @@ from kafka.producer import SimpleProducer
 from pymongo import MongoClient
 from scrapy.exceptions import DropItem
 from scrapy.conf import settings
-from twisted.python import log
-
+import logging
 
 class NytimesPipeline(object):
     def process_item(self, item, spider):
@@ -37,8 +36,7 @@ class MongoDBPipeline(object):
                 raise DropItem("Missing %s of news from %s" %(data, item['url']))
         if valid:
             self.collection.insert(dict(item))
-            log.msg('Item wrote to MongoDB database %s/%s'
-            %(settings['MONGODB_DB'], settings['MONGODB_COLLECTION']), level=log.DEBUG, spider=spider)
+            logging.debug('Item wrote to MongoDB database %s/%s' %(settings['MONGODB_DB'], settings['MONGODB_COLLECTION']))
         return item
 
 
