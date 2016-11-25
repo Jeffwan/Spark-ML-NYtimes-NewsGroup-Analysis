@@ -66,8 +66,8 @@ ROBOTSTXT_OBEY = True
 # See http://scrapy.readthedocs.org/en/latest/topics/item-pipeline.html
 ITEM_PIPELINES = {
    # 'NYtimes.pipelines.SomePipeline': 300,
-   "NYtimes.pipelines.MongoDBPipeline": 1
-   # "NYtimes.pipelines.KafkaPipeline": 300
+   # "NYtimes.pipelines.MongoDBPipeline": 1
+   "NYtimes.pipelines.KafkaPipeline": 300
 }
 
 # Enable and configure the AutoThrottle extension (disabled by default)
@@ -95,3 +95,6 @@ MONGODB_SERVER = "10.64.215.78"
 MONGODB_PORT = 27017
 MONGODB_DB = "NYtimes"
 MONGODB_COLLECTION = "news"
+
+SCRAPY_KAFKA_HOSTS = "10.64.215.78"
+SCRAPY_KAFKA_ITEM_PIPELINE_TOPIC = "nytimes"

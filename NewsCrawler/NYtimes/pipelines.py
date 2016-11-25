@@ -6,10 +6,13 @@
 # See: http://doc.scrapy.org/en/latest/topics/item-pipeline.html
 
 # https://github.com/dfdeshom/scrapy-kafka/blob/master/requirements.txt
+# https://github.com/dpkp/kafka-python new Kafka API
+# http://kafka-python.readthedocs.io/en/master/simple.html?highlight=SimpleProducer  (deprecated)
 
 from scrapy.utils.serialize import ScrapyJSONEncoder
 from kafka.client import KafkaClient
-from kafka.producer import SimpleProducer
+from kafka import KafkaProducer
+
 
 from pymongo import MongoClient
 from scrapy.exceptions import DropItem
@@ -50,12 +53,23 @@ class KafkaPipeline(object):
         item = dict(item)
         item['spider'] = spider.name
         msg = self.encoder.encode(item)
-        self.producer.send_message(self.topic, msg)
+
+        # Key is null, value is JSON object.
+        #(null, {
+        #"category": "international",
+        #"title": "Its Charter Expired, Export-Import Bank Will Keep the Doors Open",
+        #"author": "By JACKIE CALMES",
+        #"spider": "NYtimes",
+        #"link": "http://www.nytimes.com/2015/07/01/business/international/though-charter-is-expiring-export-import-bank-will-keep-its-doors-open.html",
+        #"date": "June 30, 2015",
+        #"article": ["Advertisemen.."]
+
+        self.producer.send(self.topic, msg)
 
     @classmethod
     def from_settings(cls, settings):
-        k_hosts = settings.get('SCRAPY_KFKA_HOSTS', ['localhost:9092'])
-        topic = settings.get('SCRAPY_KFKA_ITEM_PIPELINE_TOPIC', 'scrapy_kafka_item')
-        kafka = KafkaClient(k_hosts)
-        conn = SimpleProducer(kafka)
-        return cls(conn, topic)
+        kafka_hosts = settings.get('SCRAPY_KAFKA_HOSTS')
+        topic = settings['SCRAPY_KAFKA_ITEM_PIPELINE_TOPIC']
+
+        producer = KafkaProducer(bootstrap_servers = kafka_hosts)
+        return cls(producer, topic)
