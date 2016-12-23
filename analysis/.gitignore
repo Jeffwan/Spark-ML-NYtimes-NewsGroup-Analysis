@@ -1,5 +1,10 @@
+# Project files
 .classpath
 .settings/
 .project
 spark-warehouse/
 target/
+
+# Intellij files
+.idea/
+.iml
